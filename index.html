@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Project Math</title>
+    <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/b/bc/PSM_V78_D337_Archimedes.png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/10.0.1/math.min.js"></script>
+</head>
+<body>
+
+<div class="header">
+    <ul id="menuList">
+        <li><a href="#home">Home<div class="line1"></div></a></li>
+        <li><a href="#ps"><span><a href="#problem">Solve now!</a></span><div class="line1"></div></a></li>
+        <li onclick="info()"><a href="#">Contact<div class="line1"></div></a></li>
+        <li onclick="about()"><a href="#">About<div class="line1"></div></a></li>
+    </ul>
+</div>
+
+<div class="headings">
+    <h1 id="home">Find the √root of your expression</h1>
+    <p>[Enter the function f(x) and the number of its decimal places]<br><br><span>[Eg: sin(x)+cos(x), log(x), x^2 - 2, e^x]</span></p>
+</div>
+
+<a href="#problem"><div class="start">
+    <h2><span>Find Now!</span></h2>
+</div></a>
+
+<div class="page2" id="ps">
+    <form id="nr-form">
+        <!-- Add anchor tag to redirect to result page -->
+        <a name="ps"></a>
+        <h1 id="problem">Enter your algebraic or trigonometric expression</h1><br>
+        <label>Enter the function:</label>
+        <input type="text" id="expression" placeholder="Enter expression" required><br>
+        <label>Enter the decimal places:</label>
+        <input type="number" id="decimalPlaces" placeholder="Decimal places" required>
+        <!-- Change the button type to submit -->
+        <button type="submit">Solve</button>
+    </form>
+    <div id="result"></div>
+</div>
+
+<script>
+    function info() {
+        alert("Information not updated yet");
+    }
+
+    function about() {
+        alert("A Capstone project made by the department of Mechanical Engineering.");
+    }
+
+    function sign(x) {
+        if (x > 0) return 1;
+        else if (x < 0) return -1;
+        else return 0;
+    }
+
+    function newtonRaphsonMethod(func, funcDerivative, initialGuess, decimalPlaces, tolerance = 1e-6, maxIterations = 1000) {
+        let x0 = initialGuess;
+        for (let i = 0; i < maxIterations; i++) {
+            let fx0 = func(x0);
+            if (Math.abs(fx0) < tolerance) {
+                return parseFloat(x0.toFixed(decimalPlaces));
+            }
+            let fprimeX0 = funcDerivative(x0);
+            if (fprimeX0 === 0) {
+                console.log("Derivative is zero. Newton-Raphson method failed.");
+                return null;
+            }
+            let x1 = x0 - fx0 / fprimeX0;
+            if (Math.abs(x1 - x0) < tolerance) {
+                return parseFloat(x1.toFixed(decimalPlaces));
+            }
+            x0 = x1;
+        }
+        console.log("Newton-Raphson method did not converge within the maximum number of iterations.");
+        return null;
+    }
+
+    document.getElementById('nr-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        calculateRoot();
+    });
+
+    function calculateRoot() {
+        const expression = document.getElementById('expression').value;
+        const decimalPlaces = parseInt(document.getElementById('decimalPlaces').value);
+        const tolerance = 10 ** (-decimalPlaces);
+        const maxIterations = 1000;
+
+        const node = math.parse(expression);
+        const expr = node.compile();
+        const derivativeNode = math.derivative(node, 'x');
+        const derivativeExpr = derivativeNode.compile();
+
+        const func = x => expr.evaluate({ x: x, e: Math.E });
+        const funcDerivative = x => derivativeExpr.evaluate({ x: x, e: Math.E });
+
+        let start = 0; // Start from 0 to avoid negative values
+        let end = 10;
+        let step = 0.1;
+
+        let prevX = null;
+        let prevSign = null;
+        let midpoints = [];
+
+        for (let x = start; x <= end; x += step) {
+            let currentValue = func(x);
+            let currentSign = sign(currentValue);
+
+            if (prevSign !== null && prevSign !== currentSign) {
+                if (prevX !== null) {
+                    let midpoint = (prevX + x) / 2;
+                    midpoints.push(midpoint);
+                }
+            }
+
+            prevX = x;
+            prevSign = currentSign;
+        }
+
+        if (midpoints.length === 0) {
+            document.getElementById('result').innerText = "No root found within the given range :(";
+            return;
+        }
+
+        for (let midpoint of midpoints) {
+            let root = newtonRaphsonMethod(func, funcDerivative, midpoint, decimalPlaces, tolerance, maxIterations);
+            if (root !== null && root >= 0) {
+                document.getElementById('result').innerText = `The root for the given expression: ${root}`;
+                return;
+            }
+        }
+
+        document.getElementById('result').innerText = "Newton-Raphson method did not converge or derivative is zero -_-";
+    }
+</script>
+
+<div class="footer">
+    <h4>Designed with <span>❤</span> |  2024 </h4>
+</div>
+
+<script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+</html>
