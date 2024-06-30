@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
     <link rel="stylesheet" href="style.css">
     <title>Project Math</title>
     <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/b/bc/PSM_V78_D337_Archimedes.png">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/10.0.1/math.min.js"></script>
 </head>
-<body>
+<body oncontextmenu="return false;">
 
 <div class="header">
     <ul id="menuList">
@@ -45,6 +45,7 @@
 
 
 <script>
+    document.oncontextmenu = function () { return false; }
 
     function about() {
         alert("A Capstone project made by the department of Mechanical Engineering.");
