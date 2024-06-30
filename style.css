@@ -347,7 +347,6 @@ html
 }
 
 
-
 @media (min-width: 992px) and (max-width: 1199px)
 {
     .page2 form{
@@ -470,7 +469,7 @@ html
     .start
     {
         position: absolute;
-        top: 70%;
+        top: 90%;
     }
     .page2 form 
     {
@@ -493,7 +492,7 @@ html
     {
         width: 100%;
         position: absolute;
-        top: 55%;
+        top: 50%;
     }
     .back h2 
     {
@@ -510,7 +509,7 @@ html
     }
     #result
     {
-        top: 255%;
+        top: 250%;
         position: absolute;
         font-size: 0.8em;
         width: 100%;
@@ -519,14 +518,14 @@ html
     .headings p 
     {
         font-size: 0.8em;
-        margin-top: 50px;
+        margin-top: 80px;
         text-align: center;
         width: 100%;
     }
     .start 
     {
         position: absolute;
-        top: 70%;
+        top: 80%;
     }
     .headings span
     {
